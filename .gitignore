@@ -1,0 +1,88 @@
+# =====================================
+# ✅ Universal Gitignore (Backend Modern)
+# =====================================
+
+##################################
+# 📦 Dependencies & Package Manager
+##################################
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+##################################
+# 🛠️ Build Artifacts & Compiled Code
+##################################
+dist/
+build/
+lib/
+out/
+*.tsbuildinfo
+
+##################################
+# 🧪 Test & Coverage Outputs
+##################################
+coverage/
+test-results/
+jest-html-reporters-*
+.nyc_output/
+.tap/
+
+##################################
+# 🔐 Environment Files
+##################################
+.env
+.env.*
+!.env.example
+
+##################################
+# ⚙️ Editor & OS Files
+##################################
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.seed
+*.orig
+
+##################################
+# 🔄 Version Control / Merge Tools
+##################################
+*.orig
+*.rej
+*.patch
+
+##################################
+# 🧬 Prisma / ORM (optional)
+##################################
+.prisma/
+prisma/*.db
+prisma/*.db-journal
+prisma/migrations/dev/
+
+##################################
+# 📦 Babel / Configs (keep actual config files!)
+##################################
+# Note: babel.config.json should NOT be ignored
+# babel.config.js/.cjs/.json => ✅ keep in Git
+
+##################################
+# 🐳 Docker (if used)
+##################################
+docker-compose.override.yml
+.docker/
+*.env.docker.local
+
+##################################
+# ☁️ CI/CD (Optional - keep unless local only)
+##################################
+*.local.*
+.local.yml
+*.local.json
