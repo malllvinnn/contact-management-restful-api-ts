@@ -31,9 +31,26 @@ model Contact {
   last_name  String? @db.VarChar(100)
   email      String? @db.VarChar(100)
   phone      String? @db.VarChar(20)
-  username   String  @db.VarChar(100)
+
+  username String    @db.VarChar(100)
+  address  Address[]
 
   user User @relation(fields: [username], references: [username])
 
   @@map("contacts")
+}
+
+model Address {
+  id         String  @id @default(uuid())
+  street     String? @db.VarChar(255)
+  city       String? @db.VarChar(100)
+  province   String? @db.VarChar(100)
+  counrty    String  @db.VarChar(100)
+  postal_cde String  @db.VarChar(10)
+
+  contact_id String
+
+  contact Contact @relation(fields: [contact_id], references: [id])
+
+  @@map("addresses")
 }
