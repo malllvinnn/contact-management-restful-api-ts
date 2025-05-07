@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  mysql:
+    container_name: belajar_ts_restful_api
+    image: mysql:8.3
+    restart: on-failure
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: REDACTED
+      MYSQL_DATABASE: belajar_ts_restful_api
+    volumes:
+      - belajar_ts_mysql_data:/var/lib/mysql
+    networks:
+      - belajar_ts_restful_api_network
+
+volumes:
+  belajar_ts_mysql_data:
+
+networks:
+  belajar_ts_restful_api_network:
