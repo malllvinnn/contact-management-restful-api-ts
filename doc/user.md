@@ -10,8 +10,8 @@
 ```json
 {
   "username": "cah_ganteng",
-  "password": "rahasia123",
-  "name": "Muhammad Malfinn"
+  "name": "Muhammad Malfinn",
+  "password": "rahasia123"
 }
 ```
 ### Response Body (Success) :
@@ -23,13 +23,13 @@
   "message": "User Created successfully",
   "data": {
     "username": "cah_ganteng",
-    "password": "rahasia123"
+    "name": "Muhammad Malfin"
   }
 }
 ```
 ### Response Body (Failed) :
 **Status code :** 
-- Bad Request: `400`
+- Validation Error: `400`
 - Conflict: `409`
 - Internal Server Error: `500`
   
@@ -39,7 +39,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Bad Request/ Conflict/ Internal ..",
+  "message": "Validation Error/ Conflict/ Internal ..",
   "errors": []
 }
 ```
@@ -72,9 +72,8 @@ Sesuaikan dengan Status code
 ```
 ### Response Body (Failed) :
 **Status code :** 
-- Bad Request: `400`
+- Validation Error: `400`
 - Unauthorized: `401`
-- Not Found: `404`
 - Internal Server Error: `500`
   
 **Message :**
@@ -83,7 +82,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Bad Request/ Unauthorized/ Not Found/ Internal ..",
+  "message": "Validation Error/ Unauthorized/ Internal ..",
   "errors": []
 }
 ```
@@ -156,7 +155,7 @@ Sesuaikan dengan Status code
 ```
 ### Response Body (Failed) :
 **Status code :** 
-- Bad Request: `400`
+- Validation Error: `400`
 - Unauthorized: `401`
 - Not Found: `404`
 - Internal Server Error: `500`
@@ -167,7 +166,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Bad Request/ Unauthorized/ Not Found/ Internal ..",
+  "message": "Validation Error/ Unauthorized/ Not Found/ Internal ..",
   "errors": []
 }
 ```
