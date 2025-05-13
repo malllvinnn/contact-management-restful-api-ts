@@ -6,6 +6,7 @@ import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
 import jwt from "jsonwebtoken";
 import { v4 as uuid } from "uuid"
+import { User } from "@prisma/client";
 
 export class UserService {
 
@@ -79,5 +80,9 @@ export class UserService {
     const response = toUserResponse(user);
     response.token = token;
     return response;
+  }
+
+  static async get(user: User): Promise<UserResponse> {
+    return toUserResponse(user);
   }
 }
