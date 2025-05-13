@@ -84,7 +84,7 @@ describe("POST /api/users/login", (): void => {
         password: "rahasia123"
       })
 
-    logger.debug(response);
+    logger.debug(response.body);
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe("User Login successfully");
@@ -101,7 +101,7 @@ describe("POST /api/users/login", (): void => {
         password: "rahasia123"
       })
 
-    logger.debug(response);
+    logger.debug(response.body);
     expect(response.status).toBe(401);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe("Invalid username or password");
@@ -116,7 +116,7 @@ describe("POST /api/users/login", (): void => {
         password: "invalid"
       })
 
-    logger.debug(response);
+    logger.debug(response.body);
     expect(response.status).toBe(401);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe("Invalid username or password");
@@ -131,10 +131,68 @@ describe("POST /api/users/login", (): void => {
         password: ""
       })
 
-    logger.debug(response);
+    logger.debug(response.body);
     expect(response.status).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe("Validation Error");
     expect(response.body.errors).toBeDefined()
   })
+})
+
+describe("GET /api/users/current", (): void => {
+
+  beforeEach(async () => {
+    await UserTest.create();
+  })
+
+  afterEach(async () => {
+    await UserTest.delete();
+  })
+
+  it("should be able to get user", async () => {
+    // login dulu + dapatkan token
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      });
+
+    const token = loginResponse.body.data.token;
+    expect(token).toBeDefined();
+
+    // call keamaan route pakai token
+    const response = await supertest(web)
+      .get("/api/users/current")
+      .set("Authorization", `Bearer ${token}`);
+    
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("User Retrieved successfully");
+    expect(response.body.data.username).toBe("malvin_test");
+    expect(response.body.data.name).toBe("Malfin");
+  })
+
+  it("should reject get user if token is invalid", async () => {
+    // login dulu + dapatkan token
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      });
+
+    // call keamaan route pakai token
+    const response = await supertest(web)
+      .get("/api/users/current")
+      .set("Authorization", "Bearer invalid");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Unauthorized");
+    expect(response.body.errors).toBeDefined();
+  })
+
 })
