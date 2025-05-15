@@ -1,8 +1,9 @@
 import supertest from "supertest"
 import { web } from "../src/application/web"
-import { describe, it } from "@jest/globals"
+import { describe, expect, it } from "@jest/globals"
 import { logger } from "../src/application/logging"
 import { UserTest } from "./test-util"
+import bcrypt from "bcrypt"
 
 describe("POST /api/users", (): void => {
   afterEach(async () => {
@@ -165,7 +166,7 @@ describe("GET /api/users/current", (): void => {
     const response = await supertest(web)
       .get("/api/users/current")
       .set("Authorization", `Bearer ${token}`);
-    
+
     logger.debug(response.body);
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -195,4 +196,111 @@ describe("GET /api/users/current", (): void => {
     expect(response.body.errors).toBeDefined();
   })
 
+})
+
+describe("PATCH /api/users/current", (): void => {
+  beforeEach(async () => {
+    await UserTest.create();
+  })
+
+  afterEach(async () => {
+    await UserTest.delete();
+  })
+
+  it("should reject update user if request is invalid", async () => {
+    // login dulu + dapatkan token
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      });
+
+    const token = loginResponse.body.data.token;
+    expect(token).toBeDefined();
+
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        name: "",
+        password: ""
+      })
+
+    logger.debug(response.body);
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Validation Error");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should reject update user if request not logged", async () => {
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("Authorization", "invalid")
+      .send({
+        name: "Yudi",
+        password: "rahasia666"
+      })
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Unauthorized");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should be able to update user name", async () => {
+    // login dulu + dapatkan token
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      });
+
+    const token = loginResponse.body.data.token;
+    expect(token).toBeDefined();
+
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        name: "Yulia Zuma",
+      })
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("User Updated successfully");
+    expect(response.body.data.name).toBe("Yulia Zuma")
+  })
+
+  it("should be able to update user password", async () => {
+    // login dulu + dapatkan token
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      });
+
+    const token = loginResponse.body.data.token;
+    expect(token).toBeDefined();
+
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        password: "Selalu666",
+      })
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("User Updated successfully");
+
+    const user = await UserTest.get();
+    expect(await bcrypt.compare("Selalu666", user.password)).toBe(true);
+  })
 })
