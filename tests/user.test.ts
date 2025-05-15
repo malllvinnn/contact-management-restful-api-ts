@@ -304,3 +304,48 @@ describe("PATCH /api/users/current", (): void => {
     expect(await bcrypt.compare("Selalu666", user.password)).toBe(true);
   })
 })
+
+describe("DELETE /api/users/current", (): void => {
+  beforeEach(async () => {
+    await UserTest.create();
+  })
+
+  afterEach(async () => {
+    await UserTest.delete();
+  })
+
+  it("should be able to logout user", async () => {
+    // login dulu + dapatkan token
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      });
+
+    const token = loginResponse.body.data.token;
+    expect(token).toBeDefined();
+
+    const response = await supertest(web)
+      .delete("/api/users/current")
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("User Logout successfully");
+    expect(response.body.data).toBe("OK");
+  })
+
+  it("should reject logout user if token not defined or invalid", async () => {
+    const response = await supertest(web)
+      .delete("/api/users/current")
+      .set("Authorization", "Bearer invalid")
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Unauthorized");
+    expect(response.body.errors).toBeDefined();
+  })
+})
