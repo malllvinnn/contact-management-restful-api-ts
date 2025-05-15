@@ -31,7 +31,6 @@
 **Status code :** 
 - Validation Error: `400`
 - Conflict: `409`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -39,7 +38,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Validation Error/ Conflict/ Internal ..",
+  "message": "Validation Error/ Conflict",
   "errors": []
 }
 ```
@@ -74,7 +73,6 @@ Sesuaikan dengan Status code
 **Status code :** 
 - Validation Error: `400`
 - Unauthorized: `401`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -82,7 +80,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Validation Error/ Unauthorized/ Internal ..",
+  "message": "Validation Error/ Unauthorized",
   "errors": []
 }
 ```
@@ -111,7 +109,6 @@ Sesuaikan dengan Status code
 ### Response Body (Failed) :
 **Status code :** 
 - Unauthorized: `401`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -119,7 +116,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Unauthorized/ Internal ..",
+  "message": "Unauthorized",
   "errors": []
 }
 ```
@@ -157,8 +154,6 @@ Sesuaikan dengan Status code
 **Status code :** 
 - Validation Error: `400`
 - Unauthorized: `401`
-- Not Found: `404`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -166,7 +161,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Validation Error/ Unauthorized/ Not Found/ Internal ..",
+  "message": "Validation Error/ Unauthorized",
   "errors": []
 }
 ```
@@ -192,7 +187,6 @@ Sesuaikan dengan Status code
 ### Response Body (Failed) :
 **Status code :** 
 - Unauthorized: `401`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -200,7 +194,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Unauthorized/ Internal ..",
+  "message": "Unauthorized",
   "errors": []
 }
 ```
