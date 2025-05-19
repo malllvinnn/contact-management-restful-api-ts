@@ -64,3 +64,69 @@ describe("/api/contacts", (): void => {
     expect(response.body.errors).toBeDefined();
   })
 })
+
+describe("/api/contacts/:id", (): void => {
+  let token: string;
+
+  beforeEach(async () => {
+    await UserTest.create();
+
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      })
+
+    token = loginResponse.body.data.token;
+
+    await ContactTest.create();
+  });
+
+  afterEach(async () => {
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able get contact", async () => {
+    const contact = await ContactTest.get();
+    const response = await supertest(web)
+      .get(`/api/contacts/${contact.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Contact Retrieved successfully");
+    expect(response.body.data.id).toBeDefined()
+    expect(response.body.data.first_name).toBe("John");
+    expect(response.body.data.last_name).toBe("Doe");
+    expect(response.body.data.email).toBe("johndoe@example.com");
+    expect(response.body.data.phone).toBe("085555555555");
+  })
+
+  it("should reject get contact if contact not found", async () => {
+    const response = await supertest(web)
+      .get(`/api/contacts/invalid-id`)
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Contact not found");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should reject get contact if unauthorized or token invalid", async () => {
+    const contact = await ContactTest.get();
+    const response = await supertest(web)
+      .get(`/api/contacts/${contact.id}`)
+      .set("Authorization", `invalid`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Unauthorized");
+    expect(response.body.errors).toBeDefined();
+  })
+})
