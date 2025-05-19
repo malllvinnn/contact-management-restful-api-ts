@@ -31,7 +31,7 @@ export class UserTest {
     })
 
     // ini cuma agar code ngga error aja...formalitas aslinya ngga perlu
-    if(!user) {
+    if (!user) {
       throw new Error("User is not found")
     }
 
@@ -41,11 +41,37 @@ export class UserTest {
 
 export class ContactTest {
 
-  static async deleteAll(){
+  static async deleteAll() {
     await prismaClient.contact.deleteMany({
       where: {
         username: "malvin_test"
       }
     })
+  }
+
+  static async create() {
+    await prismaClient.contact.create({
+      data: {
+        first_name: "John",
+        last_name: "Doe",
+        email: "johndoe@example.com",
+        phone: "085555555555",
+        username: "malvin_test"
+      }
+    })
+  }
+
+  static async get() {
+    const contact = await prismaClient.contact.findFirst({
+      where: {
+        username: "malvin_test"
+      }
+    })
+
+    if(!contact) {
+      throw new Error("Contact is not found")
+    }
+
+    return contact;
   }
 }

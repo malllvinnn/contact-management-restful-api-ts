@@ -18,4 +18,18 @@ export class ContactController {
     next(error)
     }
   }
+
+  static async get(req: UserRequest, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      const response = await ContactService.get(req.user!, id);
+      res.status(200).json({
+        success: true,
+        message: "Contact Retrieved successfully",
+        data: response
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
