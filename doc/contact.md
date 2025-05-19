@@ -90,7 +90,7 @@ Sesuaikan dengan Status code
 ## Update Contact
 ### Endpoint : 
 - **HTTP Method :** `PUT`
-- **route path :** /api/users/contacts/:id
+- **route path :** /api/contacts/:id
 
 ### Request Header
 - Authorization: Bearer Token / token UUID
@@ -122,10 +122,8 @@ Sesuaikan dengan Status code
 ```
 ### Response Body (Failed) :
 **Status code :** 
-- Bad Request: `400`
+- Bad Request or Validation Error: `400`
 - Unauthorized: `401`
-- Conflict: `409`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -133,7 +131,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "BadRequest/ Unauthorized/ Conflict/ Internal ..",
+  "message": "BadRequest/ Unauthorized",
   "errors": []
 }
 ```
