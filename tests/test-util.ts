@@ -18,7 +18,7 @@ export class UserTest {
         username: "malvin_test",
         name: "Malfin",
         password: await bcrypt.hash("rahasia123", 10),
-        jti: "JWT-UUID-Format-Example"
+        jti: "id_jwt"
       }
     })
   }
@@ -36,5 +36,16 @@ export class UserTest {
     }
 
     return user
+  }
+}
+
+export class ContactTest {
+
+  static async deleteAll(){
+    await prismaClient.contact.deleteMany({
+      where: {
+        username: "malvin_test"
+      }
+    })
   }
 }

@@ -35,9 +35,8 @@
 ```
 ### Response Body (Failed) :
 **Status code :** 
-- Bad Request: `400`
+- Bad Request or Validation Error: `400`
 - Unauthorized: `401`
-- Conflict: `409`
 - Internal Server Error: `500`
   
 **Message :**
@@ -46,7 +45,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "BadRequest/ Unauthorized/ Conflict/ Internal ..",
+  "message": "Bad Request or Validation Error/ Unauthorized",
   "errors": []
 }
 ```
