@@ -138,7 +138,7 @@ Sesuaikan dengan Status code
 ## Remove Contact
 ### Endpoint : 
 - **HTTP Method :** `DELETE`
-- **route path :** /api/users/contacts/:id
+- **route path :** /api/contacts/:id
 
 ### Request Header
 - Authorization: Bearer Token / token UUID
@@ -156,7 +156,7 @@ Sesuaikan dengan Status code
 ### Response Body (Failed) :
 **Status code :** 
 - Unauthorized: `401`
-- Internal Server Error: `500`
+- Not Found: `404`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -164,7 +164,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "BadRequest/ Unauthorized/ Conflict/ Internal ..",
+  "message": "BadRequest/ Not Found/ Unauthorized",
   "errors": []
 }
 ```
