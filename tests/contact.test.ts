@@ -215,3 +215,65 @@ describe("PUT /api/contact/:id", (): void => {
     expect(response.body.errors).toBeDefined()
   })
 })
+
+describe("DELETE /api/contacts/:id", () => {
+  let token: string;
+
+  beforeEach(async () => {
+    await UserTest.create();
+
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      })
+
+    token = loginResponse.body.data.token;
+
+    await ContactTest.create();
+  });
+
+  afterEach(async () => {
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able to remove contact", async () => {
+    const contact = await ContactTest.get();
+    const response = await supertest(web)
+      .delete(`/api/contacts/${contact.id}`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Contact Removed successfully");
+    expect(response.body.data).toBe("OK");
+  })
+
+  it("should rejected remove contact if unauthorized or token invalid", async () => {
+    const contact = await ContactTest.get();
+    const response = await supertest(web)
+      .delete(`/api/contacts/${contact.id}`)
+      .set("Authorization", `invalid`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Unauthorized");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should rejected remove contact if contact id not found", async () => {
+    const response = await supertest(web)
+      .delete(`/api/contacts/not-found`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Contact not found");
+    expect(response.body.errors).toBeDefined();
+  })
+})

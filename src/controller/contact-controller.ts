@@ -48,4 +48,19 @@ export class ContactController {
       next(error)
     }
   }
+
+  static async remove(req: UserRequest, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+
+      await ContactService.remove(req.user!, id);
+      res.status(200).json({
+        success: true,
+        message: "Contact Removed successfully",
+        data: "OK"
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
