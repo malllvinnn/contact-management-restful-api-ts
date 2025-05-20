@@ -216,7 +216,7 @@ describe("PUT /api/contact/:id", (): void => {
   })
 })
 
-describe("DELETE /api/contacts/:id", () => {
+describe("DELETE /api/contacts/:id", (): void => {
   let token: string;
 
   beforeEach(async () => {
@@ -275,5 +275,135 @@ describe("DELETE /api/contacts/:id", () => {
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe("Contact not found");
     expect(response.body.errors).toBeDefined();
+  })
+})
+
+describe("GET /api/contacts", (): void => {
+  let token: string;
+
+  beforeEach(async () => {
+    await UserTest.create();
+
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      })
+
+    token = loginResponse.body.data.token;
+
+    await ContactTest.create();
+  });
+
+  afterEach(async () => {
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able to search contact", async () => {
+    const response = await supertest(web)
+      .get("/api/contacts")
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Contacts found");
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  })
+
+  it("should be able to search contact using name", async () => {
+    const response = await supertest(web)
+      .get("/api/contacts")
+      .query({
+        name: "John"
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Contacts found");
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  })
+  
+  it("should be able to search contact using email", async () => {
+    const response = await supertest(web)
+      .get("/api/contacts")
+      .query({
+        email: "@example"
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Contacts found");
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  })
+
+  it("should be able to search contact using phone", async () => {
+    const response = await supertest(web)
+      .get("/api/contacts")
+      .query({
+        phone: "555"
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Contacts found");
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  })
+
+  it("should be able to search contact no result or not found", async () => {
+    const response = await supertest(web)
+      .get("/api/contacts")
+      .query({
+        name: "salah"
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("No matching contacts found");
+    expect(response.body.data.length).toBe(0);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(0);
+    expect(response.body.paging.size).toBe(10);
+  })
+
+  it("should be able to search contact with paging", async () => {
+    const response = await supertest(web)
+      .get("/api/contacts")
+      .query({
+        page: 2,
+        size: 1
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("No matching contacts found");
+    expect(response.body.data.length).toBe(0);
+    expect(response.body.paging.current_page).toBe(2);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(1);
   })
 })

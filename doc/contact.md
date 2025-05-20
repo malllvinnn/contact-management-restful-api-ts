@@ -190,7 +190,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": true,
-  "message": "Contact created successfully",
+  "message": "Contact found",
   "data": [
     {
       "id": "UUID-Format",
