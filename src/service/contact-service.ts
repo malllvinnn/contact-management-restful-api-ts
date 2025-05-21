@@ -23,8 +23,8 @@ export class ContactService {
     return toContactResponse(contact)
   }
 
-  static async get(user: User, id: string): Promise<ContactResponse> {
-    const contact = await ServiceUtils.checkContactMustExists(user.username, id)
+  static async get(user: User, contactId: string): Promise<ContactResponse> {
+    const contact = await ServiceUtils.checkContactMustExists(user.username, contactId)
 
     return toContactResponse(contact);
   }
@@ -44,12 +44,12 @@ export class ContactService {
     return toContactResponse(contact)
   }
 
-  static async remove(user: User, id: string): Promise<ContactResponse> {
-    await ServiceUtils.checkContactMustExists(user.username, id);
+  static async remove(user: User, contactId: string): Promise<ContactResponse> {
+    await ServiceUtils.checkContactMustExists(user.username, contactId);
 
     const contact = await prismaClient.contact.delete({
       where: {
-        id: id,
+        id: contactId,
         username: user.username
       }
     });

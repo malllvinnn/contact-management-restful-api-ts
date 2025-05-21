@@ -21,8 +21,8 @@ export class ContactController {
 
   static async get(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      const id = req.params.id;
-      const response = await ContactService.get(req.user!, id);
+      const contactId = req.params.contactId;
+      const response = await ContactService.get(req.user!, contactId);
       res.status(200).json({
         success: true,
         message: "Contact Retrieved successfully",
@@ -36,7 +36,7 @@ export class ContactController {
   static async update(req: UserRequest, res: Response, next: NextFunction) {
     try {
       const request: UpdateContactRequest = req.body as UpdateContactRequest;
-      request.id = req.params.id;
+      request.id = req.params.contactId;
       
       const response = await ContactService.update(req.user!, request);
       res.status(200).json({
@@ -51,9 +51,9 @@ export class ContactController {
 
   static async remove(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      const id = req.params.id;
+      const contactId = req.params.contactId;
 
-      await ContactService.remove(req.user!, id);
+      await ContactService.remove(req.user!, contactId);
       res.status(200).json({
         success: true,
         message: "Contact Removed successfully",

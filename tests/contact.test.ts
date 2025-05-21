@@ -65,7 +65,7 @@ describe("POST /api/contacts", (): void => {
   })
 })
 
-describe("GET /api/contacts/:id", (): void => {
+describe("GET /api/contacts/:contactId", (): void => {
   let token: string;
 
   beforeEach(async () => {
@@ -131,7 +131,7 @@ describe("GET /api/contacts/:id", (): void => {
   })
 })
 
-describe("PUT /api/contact/:id", (): void => {
+describe("PUT /api/contact/:contactId", (): void => {
   let token: string;
 
   beforeEach(async () => {
@@ -216,7 +216,7 @@ describe("PUT /api/contact/:id", (): void => {
   })
 })
 
-describe("DELETE /api/contacts/:id", (): void => {
+describe("DELETE /api/contacts/:contactId", (): void => {
   let token: string;
 
   beforeEach(async () => {
