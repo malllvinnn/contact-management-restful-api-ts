@@ -11,6 +11,7 @@
 ### Request Body
 ```json
 {
+  "contact_id": "UUID-Format",
   "street": "Jalan apa",
   "city": "Kota apa",
   "province": "Provinsi apa",
@@ -38,9 +39,9 @@
 ```
 ### Response Body (Failed) :
 **Status code :** 
-- Bad Request: `400`
+- Bad Request / Validation Error: `400`
 - Unauthorized: `401`
-- Internal Server Error: `500`
+- Not Found: `404`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -48,7 +49,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "BadRequest/ Unauthorized/  Internal ..",
+  "message": "Bad Request / Validation Error/ Unauthorized/ Not Found",
   "errors": []
 }
 ```

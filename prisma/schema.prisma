@@ -45,8 +45,8 @@ model Address {
   street     String? @db.VarChar(255)
   city       String? @db.VarChar(100)
   province   String? @db.VarChar(100)
-  counrty    String  @db.VarChar(100)
-  postal_cde String  @db.VarChar(10)
+  country    String  @db.VarChar(100)
+  postal_code String  @db.VarChar(10)
 
   contact_id String
 

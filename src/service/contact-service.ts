@@ -1,11 +1,10 @@
-import { Contact, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { ContactResponse, CreateContactRequest, SearchContactRequest, toContactResponse, UpdateContactRequest } from "../model/contact-model";
 import { ContactValidation } from "../validation/contact-validation";
 import { Validation } from "../validation/validation";
 import { prismaClient } from "../application/database";
-import { ResponseError } from "../error/response-error";
-import { UserValidation } from "../validation/user-validation";
 import { Pageable } from "../model/page";
+import { ServiceUtils } from "./service-utils";
 
 export class ContactService {
 
@@ -24,30 +23,15 @@ export class ContactService {
     return toContactResponse(contact)
   }
 
-  private static async checkContactMustExists(username: string, id: string,): Promise<Contact> {
-    const contact = await prismaClient.contact.findUnique({
-      where: {
-        id: id,
-        username: username
-      }
-    });
-
-    if (!contact) {
-      throw new ResponseError(404, "Contact not found")
-    }
-
-    return contact;
-  }
-
   static async get(user: User, id: string): Promise<ContactResponse> {
-    const contact = await this.checkContactMustExists(user.username, id)
+    const contact = await ServiceUtils.checkContactMustExists(user.username, id)
 
     return toContactResponse(contact);
   }
 
   static async update(user: User, request: UpdateContactRequest): Promise<ContactResponse> {
     const updateRequest = Validation.validate(ContactValidation.UPDATE, request);
-    await this.checkContactMustExists(user.username, updateRequest.id);
+    await ServiceUtils.checkContactMustExists(user.username, updateRequest.id);
 
     const contact = await prismaClient.contact.update({
       where: {
@@ -61,7 +45,7 @@ export class ContactService {
   }
 
   static async remove(user: User, id: string): Promise<ContactResponse> {
-    await this.checkContactMustExists(user.username, id);
+    await ServiceUtils.checkContactMustExists(user.username, id);
 
     const contact = await prismaClient.contact.delete({
       where: {
