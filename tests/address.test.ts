@@ -5,7 +5,7 @@ import { web } from "../src/application/web";
 import { logger } from "../src/application/logging";
 import { v4 as uuidv4 } from 'uuid';
 
-describe("POST /api/contacts/:id/addresses", (): void => {
+describe("POST /api/contacts/:contactId/addresses", (): void => {
   let token: string;
 
   beforeEach(async () => {

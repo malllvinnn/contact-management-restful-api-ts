@@ -8,7 +8,7 @@ export class AddressController {
   static async create(req: UserRequest, res: Response, next: NextFunction) {
     try {
       const request: CreateAddressRequest = req.body as CreateAddressRequest;
-      request.contact_id = req.params.id;
+      request.contact_id = req.params.contactId;
 
       const response = await AddressService.create(req.user!, request);
 

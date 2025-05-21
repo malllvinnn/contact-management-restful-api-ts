@@ -4,10 +4,10 @@ import { ResponseError } from "../error/response-error";
 
 export class ServiceUtils {
   
-    static async checkContactMustExists(username: string, id: string,): Promise<Contact> {
+    static async checkContactMustExists(username: string, contactId: string,): Promise<Contact> {
       const contact = await prismaClient.contact.findUnique({
         where: {
-          id: id,
+          id: contactId,
           username: username
         }
       });
