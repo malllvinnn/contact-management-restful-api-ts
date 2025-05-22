@@ -82,8 +82,7 @@ Sesuaikan dengan Status code
 ### Response Body (Failed) :
 **Status code :** 
 - Unauthorized: `401`
-- Not Found: `404`
-- Internal Server Error: `500`
+- Not Found: `404` (contact id dan address id)
   
 **Message :**
 Sesuaikan dengan Status code
@@ -91,7 +90,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Unauthorized/ Not Found/ Internal ..",
+  "message": "Unauthorized/ Not Found",
   "errors": []
 }
 ```
