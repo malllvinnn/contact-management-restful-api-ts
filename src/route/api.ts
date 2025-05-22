@@ -21,3 +21,4 @@ apiRouter.get("/api/contacts", ContactController.search)
 
 // Address API
 apiRouter.post("/api/contacts/:contactId/addresses", AddressController.create)
+apiRouter.get("/api/contacts/:contactId/addresses/:addressId", AddressController.get)
