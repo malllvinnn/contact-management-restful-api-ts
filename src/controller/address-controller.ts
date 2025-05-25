@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { UserRequest } from "../type/user-request";
-import { CreateAddressRequest, GetAddressRequest } from "../model/address-model";
+import { CreateAddressRequest, GetAddressRequest, UpdateAddressRequest } from "../model/address-model";
 import { AddressService } from "../service/address-service";
 
 export class AddressController {
@@ -34,6 +34,24 @@ export class AddressController {
       res.status(200).json({
         success: true,
         message: "Address Retrieved successfully",
+        data: response,
+      });
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async update(req: UserRequest, res: Response, next: NextFunction) {
+    try {
+      const request: UpdateAddressRequest = req.body as UpdateAddressRequest;
+      request.contact_id = req.params.contactId;
+      request.id = req.params.addressId;
+
+      const response = await AddressService.update(req.user!, request);
+
+      res.status(200).json({
+        success: true,
+        message: "Address Updated successfully",
         data: response,
       });
     } catch (error) {

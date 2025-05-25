@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { AddressResponse, CreateAddressRequest, GetAddressRequest, toAddressResponse } from "../model/address-model";
+import { AddressResponse, CreateAddressRequest, GetAddressRequest, toAddressResponse, UpdateAddressRequest } from "../model/address-model";
 import { Validation } from "../validation/validation";
 import { AddressValidation } from "../validation/address-validation";
 import { ServiceUtils } from "./service-utils";
@@ -22,19 +22,26 @@ export class AddressService {
   static async get(user: User, request: GetAddressRequest): Promise<AddressResponse> {
     const getRequest = Validation.validate(AddressValidation.GET, request);
     await ServiceUtils.checkContactMustExists(user.username, request.contact_id);
-
-    const address = await prismaClient.address.findFirst({
-      where: {
-        id: getRequest.id,
-        contact_id: getRequest.contact_id
-      }
-    });
-
-    if (!address){
-      throw new ResponseError(404, "Address not found");
-    };
+    const address = await ServiceUtils.checkAddressMustExists(getRequest.contact_id, getRequest.id);
 
     return toAddressResponse(address);
+  }
+
+  static async update(user: User, request: UpdateAddressRequest): Promise<AddressResponse> {
+    const updateRequest = Validation.validate(AddressValidation.UPDATE, request);
+    await ServiceUtils.checkContactMustExists(user.username, request.contact_id);
+    await ServiceUtils.checkAddressMustExists(updateRequest.contact_id, updateRequest.id);
+
+    const address = await prismaClient.address.update({
+      where: {
+        id: updateRequest.id,
+        contact_id: updateRequest.contact_id
+      },
+      data: updateRequest
+    })
+
+    return toAddressResponse(address);
+    
   }
 
 }

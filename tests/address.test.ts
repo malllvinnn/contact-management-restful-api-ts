@@ -146,7 +146,7 @@ describe("GET /api/contacts/:contactId/address/:addressId", (): void => {
     const response = await supertest(web)
       .get(`/api/contacts/${contact.id}/addresses/${address.id}`)
       .set("Authorization", `Bearer ${token}`);
-    
+
     logger.debug(response.body);
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -196,6 +196,146 @@ describe("GET /api/contacts/:contactId/address/:addressId", (): void => {
     const response = await supertest(web)
       .get(`/api/contacts/${contact.id}/addresses/${isNotAddress}`)
       .set("Authorization", `Bearer ${token}`);
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Address not found");
+    expect(response.body.errors).toBeDefined();
+  })
+})
+
+describe("PUT /api/contacts/:contactId/addresses/:addressId", () => {
+  let token: string;
+
+  beforeEach(async () => {
+    await UserTest.create();
+
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      })
+
+    token = loginResponse.body.data.token;
+
+    await ContactTest.create();
+    await AddressTest.create();
+  });
+
+  afterEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able to update address", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .put(`/api/contacts/${contact.id}/addresses/${address.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        street: "Jalan Manguraya no 29",
+        city: "Sunke",
+        province: "Jawa Tengah",
+        country: "Indonesia",
+        postal_code: "51352"
+      });
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Address Updated successfully");
+    expect(response.body.data.street).toBe("Jalan Manguraya no 29");
+    expect(response.body.data.city).toBe("Sunke");
+    expect(response.body.data.province).toBe("Jawa Tengah");
+    expect(response.body.data.country).toBe("Indonesia");
+    expect(response.body.data.postal_code).toBe("51352");
+  })
+
+  it("should reject update address if bad request or validation error", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .put(`/api/contacts/${contact.id}/addresses/${address.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        street: "Jalan Manguraya no 29",
+        city: "Sunke",
+        province: "Jawa Tengah",
+        country: "",
+        postal_code: ""
+      });
+
+    logger.debug(response.body);
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Validation Error");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should reject update address if unauthorization or token invalid", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .put(`/api/contacts/${contact.id}/addresses/${address.id}`)
+      .set("Authorization", `invalid`)
+      .send({
+        street: "Jalan Manguraya no 29",
+        city: "Sunke",
+        province: "Jawa Tengah",
+        country: "Indonesia",
+        postal_code: "51352"
+      });
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Unauthorized");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should reject update address if contact not found", async () => {
+    const isNotContactId = uuidv4()
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .put(`/api/contacts/${isNotContactId}/addresses/${address.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        street: "Jalan Manguraya no 29",
+        city: "Sunke",
+        province: "Jawa Tengah",
+        country: "Indonesia",
+        postal_code: "51352"
+      });
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Contact not found");
+    expect(response.body.errors).toBeDefined();
+  })
+
+  it("should reject update address if address not found", async () => {
+    const contact = await ContactTest.get();
+    const isNotAddressId = uuidv4()
+
+    const response = await supertest(web)
+      .put(`/api/contacts/${contact.id}/addresses/${isNotAddressId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        street: "Jalan Manguraya no 29",
+        city: "Sunke",
+        province: "Jawa Tengah",
+        country: "Indonesia",
+        postal_code: "51352"
+      });
 
     logger.debug(response.body);
     expect(response.status).toBe(404);

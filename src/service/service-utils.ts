@@ -1,4 +1,4 @@
-import { Contact } from "@prisma/client";
+import { Address, Contact } from "@prisma/client";
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/response-error";
 
@@ -17,5 +17,20 @@ export class ServiceUtils {
       }
   
       return contact;
+    }
+
+    static async checkAddressMustExists(contactId: string, addressId: string): Promise<Address> {
+      const address = await prismaClient.address.findFirst({
+        where: {
+          id: addressId,
+          contact_id: contactId
+        }
+      });
+
+      if (!address) {
+        throw new ResponseError(404, "Address not found");
+      };
+
+      return address;
     }
 }
