@@ -11,7 +11,6 @@
 ### Request Body
 ```json
 {
-  "contact_id": "UUID-Format",
   "street": "Jalan apa",
   "city": "Kota apa",
   "province": "Provinsi apa",
