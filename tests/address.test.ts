@@ -1,4 +1,4 @@
-import { describe, it } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 import { AddressTest, ContactTest, UserTest } from "./test-util";
 import supertest from "supertest";
 import { web } from "../src/application/web";
@@ -249,6 +249,7 @@ describe("PUT /api/contacts/:contactId/addresses/:addressId", () => {
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe("Address Updated successfully");
+    expect(response.body.data.id).toBe(address.id);
     expect(response.body.data.street).toBe("Jalan Manguraya no 29");
     expect(response.body.data.city).toBe("Sunke");
     expect(response.body.data.province).toBe("Jawa Tengah");
@@ -342,5 +343,91 @@ describe("PUT /api/contacts/:contactId/addresses/:addressId", () => {
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe("Address not found");
     expect(response.body.errors).toBeDefined();
+  })
+})
+
+describe("DELETE /api/contacts/:contactId/addresses/:addressId", () => {
+  let token: string;
+
+  beforeEach(async () => {
+    await UserTest.create();
+
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      })
+
+    token = loginResponse.body.data.token;
+
+    await ContactTest.create();
+    await AddressTest.create();
+  });
+
+  afterEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able to remove address", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .delete(`/api/contacts/${contact.id}/addresses/${address.id}`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200)
+    expect(response.body.success).toBe(true)
+    expect(response.body.message).toBe("Address Removed successfully")
+    expect(response.body.data).toBe("OK")
+  })
+
+  it("should reject remove address if unauthorization or token invalid", async () => {
+    const contact = await ContactTest.get();
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .delete(`/api/contacts/${contact.id}/addresses/${address.id}`)
+      .set("Authorization", `invalid`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401)
+    expect(response.body.success).toBe(false)
+    expect(response.body.message).toBe("Unauthorized")
+    expect(response.body.errors).toBeDefined()
+  })
+
+  it("should reject remove address if contact not found", async () => {
+    const isNotContactId = uuidv4()
+    const address = await AddressTest.get();
+
+    const response = await supertest(web)
+      .delete(`/api/contacts/${isNotContactId}/addresses/${address.id}`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404)
+    expect(response.body.success).toBe(false)
+    expect(response.body.message).toBe("Contact not found")
+    expect(response.body.errors).toBeDefined()
+  })
+
+  it("should reject remove address if address not found", async () => {
+    const contact = await ContactTest.get();
+    const isNotAddressId = uuidv4()
+
+    const response = await supertest(web)
+      .delete(`/api/contacts/${contact.id}/addresses/${isNotAddressId}`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404)
+    expect(response.body.success).toBe(false)
+    expect(response.body.message).toBe("Address not found")
+    expect(response.body.errors).toBeDefined()
   })
 })
