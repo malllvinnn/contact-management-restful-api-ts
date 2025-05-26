@@ -170,7 +170,6 @@ Sesuaikan dengan Status code
 **Status code :** 
 - Unauthorized: `401`
 - Not Found: `404`
-- Internal Server Error: `500`
   
 **Message :**
 Sesuaikan dengan Status code
@@ -178,7 +177,7 @@ Sesuaikan dengan Status code
 ```json
 {
   "success": false,
-  "message": "Unauthorized/ Not Found/ Internal ..",
+  "message": "Unauthorized/ Not Found",
   "errors": []
 }
 ```
