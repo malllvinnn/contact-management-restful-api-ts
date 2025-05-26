@@ -7,7 +7,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc", 
+    "start:build": "tsc && node ./dist/main.js",
+    "start": "node ./dist/main.js",
+    "dev": "ts-node-dev --respawn src/main.ts" 
   },
   "jest": {
     "transform": {
