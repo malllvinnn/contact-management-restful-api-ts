@@ -1,0 +1,45 @@
+### Create Address
+POST http://localhost:3000/api/contacts/e7d65fac-f973-458f-a109-ce288e0946f7/addresses
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+{
+  "street": "Jalan Tantaman",
+  "city": "Cerpai",
+  "province": "Jawa Tengah",
+  "country": "Ice Perfect",
+  "postal_code": "51352"
+}
+
+### Get Address
+GET http://localhost:3000/api/contacts/e7d65fac-f973-458f-a109-ce288e0946f7/addresses/89855d52-9ad2-4e29-bec2-6d3242a19a01
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+### Update Address
+PUT http://localhost:3000/api/contacts/e7d65fac-f973-458f-a109-ce288e0946f7/addresses/89855d52-9ad2-4e29-bec2-6d3242a19a01
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+{
+  "street": "Jalan Mei",
+  "city": "Mei Kong",
+  "province": "Kawa Iso",
+  "country": "Indonesia",
+  "postal_code": "51352"
+}
+
+### Delete Address
+DELETE http://localhost:3000/api/contacts/e7d65fac-f973-458f-a109-ce288e0946f7/addresses/89855d52-9ad2-4e29-bec2-6d3242a19a01
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+### List Address
+GET http://localhost:3000/api/contacts/e7d65fac-f973-458f-a109-ce288e0946f7/addresses
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>

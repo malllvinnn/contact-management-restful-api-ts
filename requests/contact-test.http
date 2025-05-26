@@ -1,0 +1,43 @@
+### Create Contact
+POST http://localhost:3000/api/contacts
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+{
+  "first_name": "Zang",
+  "last_name": "Niu",
+  "email": "zangniu@example.com",
+  "phone": "083333333333"
+}
+
+### Get Contact
+GET  http://localhost:3000/api/contacts/3487e08f-e56f-4cfb-81c3-df6dd5a9efc2
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+### Update Contact
+PUT http://localhost:3000/api/contacts/3487e08f-e56f-4cfb-81c3-df6dd5a9efc2
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+{
+  "first_name": "Wang",
+  "last_name": "Lin",
+  "email": "wanglin@example.com",
+  "phone": "087777777777"
+}
+
+### Remove Contact
+DELETE http://localhost:3000/api/contacts/3487e08f-e56f-4cfb-81c3-df6dd5a9efc2
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>
+
+### Search Contact
+GET http://localhost:3000/api/contacts
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer <JWT-TOKEN>

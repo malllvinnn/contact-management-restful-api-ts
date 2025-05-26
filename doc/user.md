@@ -9,9 +9,9 @@
 ### Request Body :
 ```json
 {
-  "username": "cah_ganteng",
-  "name": "Muhammad Malfinn",
-  "password": "rahasia123"
+  "username": "john_doe",
+  "name": "John Doe",
+  "password": "password123"
 }
 ```
 ### Response Body (Success) :
