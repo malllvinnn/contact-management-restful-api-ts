@@ -431,3 +431,71 @@ describe("DELETE /api/contacts/:contactId/addresses/:addressId", () => {
     expect(response.body.errors).toBeDefined()
   })
 })
+
+describe("GET /api/contacts/:contactId/addresses", () => {
+  let token: string;
+
+  beforeEach(async () => {
+    await UserTest.create();
+
+    const loginResponse = await supertest(web)
+      .post("/api/users/login")
+      .send({
+        username: "malvin_test",
+        password: "rahasia123"
+      })
+
+    token = loginResponse.body.data.token;
+
+    await ContactTest.create();
+    await AddressTest.create();
+  });
+
+  afterEach(async () => {
+    await AddressTest.deleteAll();
+    await ContactTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able to list addresses", async () => {
+    const contact = await ContactTest.get();
+
+    const response = await supertest(web)
+      .get(`/api/contacts/${contact.id}/addresses`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200)
+    expect(response.body.success).toBe(true)
+    expect(response.body.message).toBe("Addresses Retrieved successfully")
+    expect(response.body.data.length).toBe(1)
+  })
+
+  it("should reject list addresses if unauthorization or token invalid", async () => {
+    const contact = await ContactTest.get();
+
+    const response = await supertest(web)
+      .get(`/api/contacts/${contact.id}/addresses`)
+      .set("Authorization", `invalid`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(401)
+    expect(response.body.success).toBe(false)
+    expect(response.body.message).toBe("Unauthorized")
+    expect(response.body.errors).toBeDefined()
+  })
+
+  it("should reject list addresses if contact not found or invalid", async () => {
+    const isNotContactId = uuidv4();
+
+    const response = await supertest(web)
+      .get(`/api/contacts/${isNotContactId}/addresses`)
+      .set("Authorization", `Bearer ${token}`)
+
+    logger.debug(response.body);
+    expect(response.status).toBe(404)
+    expect(response.body.success).toBe(false)
+    expect(response.body.message).toBe("Contact not found")
+    expect(response.body.errors).toBeDefined()
+  })
+})
