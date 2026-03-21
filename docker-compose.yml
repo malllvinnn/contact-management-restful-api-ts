@@ -2,21 +2,46 @@ version: "3.8"
 
 services:
   mysql:
-    container_name: belajar_ts_restful_api
+    container_name: db_contact_management
     image: mysql:8.3
-    restart: on-failure
+    restart: always
     ports:
       - "3306:3306"
+    env_file:
+      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: REDACTED
-      MYSQL_DATABASE: belajar_ts_restful_api
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: db_contact_management
     volumes:
-      - belajar_ts_mysql_data:/var/lib/mysql
+      - volume_contact_management:/var/lib/mysql
     networks:
-      - belajar_ts_restful_api_network
+      - net_contact_management
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      timeout: 20s
+      retries: 10
+
+  api:
+    container_name: api_contact_management
+    build: .
+    restart: always
+    ports:
+      - "${PORT:-3000}:3000" 
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES: ${JWT_EXPIRES}
+      PORT: ${PORT}
+    networks:
+      - net_contact_management
 
 volumes:
-  belajar_ts_mysql_data:
+  volume_contact_management:
 
 networks:
-  belajar_ts_restful_api_network:
+  net_contact_management:

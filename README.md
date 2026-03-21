@@ -19,51 +19,49 @@
 # 🚀 TypeScript RESTful API - Project Starter
 A simple RESTful API built with TypeScript, Express, Prisma, and MySQL.
 
-## 🗂️ Create `.env` File
-### Example:
+## 🔐 Environment Setup
+
+### 1️⃣ Create `.env` File
+Copy the example file and fill in your credentials:
+```bash
+cp .env.example .env
 ```
-DATABASE_URL="mysql://janedoe:mypassword@localhost:3306/mydb"
-JWT_SECRET="JWTSecret"
-JWT_EXPIRES="2h"
+
+Edit `.env` file with your own secure values:
+```env
+# MySQL Configuration
+MYSQL_ROOT_PASSWORD=your_secure_password_here
+
+# Database URL (for local development)
+DATABASE_URL="mysql://root:your_secure_password_here@localhost:3306/db_contact_management"
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_here
+JWT_EXPIRES=2h
+
+# Application Port
 PORT=3000
 ```
 
-## 🐳 Database Setup (with Docker)
-If you are using Docker for the database, follow these steps:
-### 📝 Create `docker-compose.yml`
-Example configuration:
-```yaml
-version: "3.8"
+**⚠️ IMPORTANT SECURITY NOTES:**
+- ✅ `.env` is in `.gitignore` - your secrets are safe
+- ✅ `.env.example` provides a template without real credentials
+- ❌ **NEVER** commit `.env` to git
+- 🔑 Use strong, unique passwords in production
 
-services:
-  mysql:
-    container_name: mysql_server
-    image: mysql:8.3
-    restart: on-failure
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: admin123
-      MYSQL_DATABASE: app_database
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - app_network
+## 🐳 Docker Setup
 
-volumes:
-  mysql_data:
-
-networks:
-  app_network:
+### ▶️ Run with Docker Compose
+```bash
+docker-compose up -d
 ```
-### ▶️ Run MySQL Database using Docker
-```shell
-docker compose up -d
-```
+
+The `docker-compose.yml` uses environment variables from your `.env` file - **no hardcoded passwords!**
+
 This command will:
-- 🚀 Start a MySQL container named `mysql_server`.
-- 🏗️ Create a default database named `app_database`.
-- 🔒 Set the MySQL root password as `admin123`.
+- 🚀 Start MySQL container with your secure password
+- 🏗️ Create database `db_contact_management`
+- 🔒 All credentials loaded from `.env` file
 
 ## 📦 Step Runner
 ### 📥 Install Project
