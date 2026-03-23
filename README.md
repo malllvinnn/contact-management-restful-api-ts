@@ -49,27 +49,40 @@ PORT=3000
 - ❌ **NEVER** commit `.env` to git
 - 🔑 Use strong, unique passwords in production
 
-## 🐳 Docker Setup
+## 🚀 Running the Application
 
-### ▶️ Run with Docker Compose
+You can run this project using either Docker (Recommended) or Locally on your machine. Choose one of the methods below:
+
+### Option A: 🐳 Run with Docker (Recommended)
+
+This command will spin up both the MySQL database and the Express API containers:
 ```bash
 docker-compose up -d
 ```
 
-The `docker-compose.yml` uses environment variables from your `.env` file - **no hardcoded passwords!**
+**Important:** If this is your first time running the project, you must build the database tables by executing the Prisma migration inside the API container:
+
+```bash
+docker exec -it name_container_api npx prisma migrate deploy
+```
 
 This command will:
 - 🚀 Start MySQL container with your secure password
 - 🏗️ Create database `db_contact_management`
 - 🔒 All credentials loaded from `.env` file
 
-## 📦 Step Runner
-### 📥 Install Project
+### Option B: 💻 Run Locally (Bare Metal)
+
+If you prefer to run the API directly on your machine (make sure you have your own MySQL instance running and configured in .env):
+
+#### Install Dependencies
+
 ```shell
 npm install
 ```
 
-### ⚙️ Prisma Setup
+#### ⚙️ Prisma Setup (Push Schema to DB)
+
 ```shell
 npx prisma migrate dev
 ```
@@ -79,12 +92,14 @@ npx prisma migrate dev
 npx prisma generate
 ```
 
-### 🏗️ Build Typescript to Javascript
+#### 🏗️ Build Typescript to Javascript
+
 ```shell
 npm run build
 ```
 
-### 🚀 Run the compiled project
+#### 🚀 Run the compiled project
+
 ```shell
 npm run start
 ```
