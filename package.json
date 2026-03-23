@@ -1,17 +1,17 @@
 {
   "name": "contact-management-restful-api-ts",
   "version": "1.0.0",
-  "description": "untuk belajar membuat RESTfull API di TS",
+  "description": "untuk belajar membuat RESTfull API",
   "license": "ISC",
   "author": "MUHAMMAD MALFIN",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
-    "build": "tsc", 
+    "build": "tsc",
     "start:build": "tsc && node ./dist/main.js",
     "start": "node ./dist/main.js",
-    "dev": "ts-node-dev --respawn src/main.ts" 
+    "dev": "ts-node-dev --respawn src/main.ts"
   },
   "jest": {
     "transform": {
@@ -21,6 +21,7 @@
   "dependencies": {
     "@prisma/client": "^6.7.0",
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.6",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^11.1.0",
@@ -32,6 +33,7 @@
     "@babel/preset-typescript": "^7.27.1",
     "@jest/globals": "^29.7.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
@@ -41,6 +43,7 @@
     "jest": "^29.7.0",
     "prisma": "^6.7.0",
     "supertest": "^7.1.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
 }
