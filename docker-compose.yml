@@ -48,9 +48,12 @@ services:
       CLIENT_URL: ${CLIENT_URL}
     networks:
       - net_contact_management
+      - apps_network
 
 volumes:
   volume_contact_management:
 
 networks:
   net_contact_management:
+  apps_network:
+    external: true
