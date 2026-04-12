@@ -1,26 +1,31 @@
-# Pakai Node.js versi 20 yang super ringan
-FROM node:20-alpine
+# ── Stage 1: Builder ──────────────────────────────────────────────────────────
+FROM node:20-alpine AS builder
 
-# Set folder kerja di dalam container
 WORKDIR /app
 
-# Copy package.json dulu buat optimalisasi cache Docker
 COPY package*.json ./
+RUN npm ci
 
-# Install semua dependencies
-RUN npm install
-
-# Copy seluruh file project ke dalam container
 COPY . .
-
-# Generate Prisma Client (Wajib buat Prisma)
 RUN npx prisma generate
-
-# Build TypeScript jadi JavaScript ke folder dist/
 RUN npm run build
 
-# Expose port (asumsi BE lu jalan di port 3000)
+# ── Stage 2: Runner ───────────────────────────────────────────────────────────
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Install production deps only
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# Copy compiled app
+COPY --from=builder /app/dist ./dist
+
+# Copy Prisma schema + generated client
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY prisma ./prisma
+
 EXPOSE 3000
 
-# Jalanin file hasil build
 CMD ["node", "dist/main.js"]

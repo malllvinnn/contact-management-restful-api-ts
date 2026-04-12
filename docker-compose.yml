@@ -5,8 +5,6 @@ services:
     container_name: db_contact_management
     image: mysql:8.3
     restart: always
-    # ports:
-    #   - "3306:3306"
     env_file:
       - .env
     environment:
@@ -24,18 +22,19 @@ services:
           "ping",
           "-h",
           "localhost",
-          "-u${MYSQL_USER}",
+          "-uroot",
           "-p${MYSQL_ROOT_PASSWORD}",
         ]
+      interval: 10s
       timeout: 20s
       retries: 10
 
   api:
-    container_name: api_contact_management
-    build: .
+    container_name: contact_mgmt_api
+    image: ghcr.io/malllvinnn/contact-management-restful-api-ts:latest
     restart: always
     ports:
-      - "${PORT:-3000}:3000"
+      - "3001:3000"
     depends_on:
       mysql:
         condition: service_healthy
@@ -45,7 +44,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES: ${JWT_EXPIRES}
-      PORT: ${PORT}
+      PORT: 3000
       CLIENT_URL: ${CLIENT_URL}
     networks:
       - net_contact_management
