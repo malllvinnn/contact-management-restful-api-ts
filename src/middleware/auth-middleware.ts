@@ -15,7 +15,7 @@ export const authMiddleware = async (req: UserRequest, res: Response, next: Next
     const token = authHeader.split(" ")[1];
 
     // 2. verify jwt
-    const decode = jwt.verify(token, process.env.JWT_SECRET || "secret") as jwt.JwtPayload;
+    const decode = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
 
     // 3. ambil user dari db username
     const user = await prismaClient.user.findUnique({

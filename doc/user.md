@@ -2,11 +2,18 @@
 
 ## Register User
 
-### Endpoint : 
-- **HTTP Method :** `POST`
-- **route path :** /api/users
+### Endpoint
+- **Method:** `POST`
+- **Path:** `/api/users`
 
-### Request Body :
+### Request Body
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| username | string | Yes | Unique username |
+| name | string | Yes | Display name |
+| password | string | Yes | Account password |
+
 ```json
 {
   "username": "john_doe",
@@ -14,169 +21,172 @@
   "password": "password123"
 }
 ```
-### Response Body (Success) :
-**status code :** 
-- Created: `201`
+
+### Response — Success `201`
+
 ```json
 {
   "success": true,
   "message": "User Created successfully",
   "data": {
-    "username": "cah_ganteng",
-    "name": "Muhammad Malfin"
+    "username": "john_doe",
+    "name": "John Doe"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Validation Error: `400`
-- Conflict: `409`
-  
-**Message :**
-Sesuaikan dengan Status code
+
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `400` | Validation error (missing or invalid fields) |
+| `409` | Username already exists |
 
 ```json
 {
   "success": false,
-  "message": "Validation Error/ Conflict",
+  "message": "Username already exists",
   "errors": []
 }
 ```
 
-## Login User
-### Endpoint : 
-- **HTTP Method :** `POST`
-- **route path :** /api/users/login
+---
 
-### Request Body :
+## Login User
+
+### Endpoint
+- **Method:** `POST`
+- **Path:** `/api/users/login`
+
+### Request Body
+
+| Field | Type | Required |
+|---|---|---|
+| username | string | Yes |
+| password | string | Yes |
+
 ```json
 {
-  "username": "cah_ganteng",
-  "password": "rahasia123",
+  "username": "john_doe",
+  "password": "password123"
 }
 ```
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+
+### Response — Success `200`
+
 ```json
 {
   "success": true,
   "message": "User Login successfully",
   "data": {
-    "username": "cah_ganteng",
-    "name": "Muhammad Malfin",
-    "token": "JWT token / UUID"
+    "username": "john_doe",
+    "name": "John Doe",
+    "token": "<JWT token>"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Validation Error: `400`
-- Unauthorized: `401`
-  
-**Message :**
-Sesuaikan dengan Status code
+
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `400` | Validation error |
+| `401` | Invalid username or password |
 
 ```json
 {
   "success": false,
-  "message": "Validation Error/ Unauthorized",
+  "message": "Invalid username or password",
   "errors": []
 }
 ```
 
-## Get User
-### Endpoint : 
-- **HTTP Method :** `GET`
-- **route path :** /api/users/current
+---
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+## Get Current User
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+### Endpoint
+- **Method:** `GET`
+- **Path:** `/api/users/current`
+- **Auth:** `Authorization: Bearer <token>`
+
+### Response — Success `200`
+
 ```json
 {
   "success": true,
   "message": "User Retrieved successfully",
   "data": {
-    "username": "cah_ganteng",
-    "name": "Muhammad Malfin",
+    "username": "john_doe",
+    "name": "John Doe"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Unauthorized: `401`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "Unauthorized",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `401` | Missing, invalid, or expired token |
+
+---
 
 ## Update User
-### Endpoint : 
-- **HTTP Method :** `PATCH`
-- **route path :** /api/users/current
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+### Endpoint
+- **Method:** `PATCH`
+- **Path:** `/api/users/current`
+- **Auth:** `Authorization: Bearer <token>`
 
-### Request Body :
+### Request Body
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| name | string | No | New display name |
+| password | string | No | New password |
+
+At least one field must be provided.
+
 ```json
 {
-  "password": "rahasia123", // tidak wajib
-  "name": "Budi Sudarsono" // tidak wajib
+  "name": "Jane Doe",
+  "password": "newpassword123"
 }
 ```
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+### Response — Success `200`
+
 ```json
 {
   "success": true,
   "message": "User Updated successfully",
   "data": {
-    "username": "cah_ganteng",
-    "name": "Budi Sudarsono",
+    "username": "john_doe",
+    "name": "Jane Doe"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Validation Error: `400`
-- Unauthorized: `401`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "Validation Error/ Unauthorized",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `400` | Validation error |
+| `401` | Missing or invalid token |
+
+---
 
 ## Logout User
-### Endpoint : 
-- **HTTP Method :** `DELETE`
-- **route path :** /api/users/current
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+### Endpoint
+- **Method:** `DELETE`
+- **Path:** `/api/users/current`
+- **Auth:** `Authorization: Bearer <token>`
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+Invalidates the current token immediately by clearing the stored JTI in the database.
+
+### Response — Success `200`
+
 ```json
 {
   "success": true,
@@ -184,17 +194,9 @@ Sesuaikan dengan Status code
   "data": "OK"
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Unauthorized: `401`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "Unauthorized",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `401` | Missing or invalid token |
