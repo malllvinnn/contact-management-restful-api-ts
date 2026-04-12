@@ -30,7 +30,7 @@ describe("POST /api/users", (): void => {
     const newUser = {
       username: "malvin_test",
       name: "Malfin",
-      password: "REDACTED"
+      password: "TestPassword123"
     }
 
     await supertest(web)
@@ -55,7 +55,7 @@ describe("POST /api/users", (): void => {
       .send({
         username: "malvin_test",
         name: "Malfin",
-        password: "REDACTED"
+        password: "TestPassword123"
       })
 
     logger.debug(response.body);

@@ -1,151 +1,147 @@
 # Contact API Spec
 
-## Create Contact
-### Endpoint : 
-- **HTTP Method :** `POST`
-- **route path :** /api/contacts
+All endpoints require authentication: `Authorization: Bearer <token>`
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+---
+
+## Create Contact
+
+### Endpoint
+- **Method:** `POST`
+- **Path:** `/api/contacts`
 
 ### Request Body
+
+| Field | Type | Required |
+|---|---|---|
+| first_name | string | Yes |
+| last_name | string | No |
+| email | string | No |
+| phone | string | No |
+
 ```json
 {
-  "first_name": "Xiao",
-  "last_name": "Yan",
-  "email": "yesoseso@example.com",
-  "phone": "088775758"
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "johndoe@example.com",
+  "phone": "08123456789"
 }
 ```
 
-### Response Body (Success) :
-**status code :** 
-- Created: `201`
+### Response — Success `201`
+
 ```json
 {
   "success": true,
   "message": "Contact Created successfully",
   "data": {
-    "first_name": "Xiao",
-    "last_name": "Yan",
-    "email": "yesoseso@example.com",
-    "phone": "088775758"
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "johndoe@example.com",
+    "phone": "08123456789"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Bad Request or Validation Error: `400`
-- Unauthorized: `401`
-- Internal Server Error: `500`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "Bad Request or Validation Error/ Unauthorized",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `400` | Validation error |
+| `401` | Missing or invalid token |
+
+---
+
 ## Get Contact
-### Endpoint : 
-- **HTTP Method :** `GET`
-- **route path :** /api/contacts/:id
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+### Endpoint
+- **Method:** `GET`
+- **Path:** `/api/contacts/:contactId`
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+### Response — Success `200`
+
 ```json
 {
   "success": true,
   "message": "Contact Retrieved successfully",
   "data": {
-    "first_name": "Xiao",
-    "last_name": "Yan",
-    "email": "yesoseso@example.com",
-    "phone": "088775758"
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "johndoe@example.com",
+    "phone": "08123456789"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Unauthorized: `401`
-- Not Found: `404`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "Unauthorized/ Not Found",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `401` | Missing or invalid token |
+| `404` | Contact not found or not owned by current user |
+
+---
+
 ## Update Contact
-### Endpoint : 
-- **HTTP Method :** `PUT`
-- **route path :** /api/contacts/:id
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+### Endpoint
+- **Method:** `PUT`
+- **Path:** `/api/contacts/:contactId`
 
 ### Request Body
+
+| Field | Type | Required |
+|---|---|---|
+| first_name | string | Yes |
+| last_name | string | No |
+| email | string | No |
+| phone | string | No |
+
 ```json
 {
-  "first_name": "Han",
-  "last_name": "Feng",
-  "email": "yesoseso@example.com",
-  "phone": "088775758"
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "janedoe@example.com",
+  "phone": "08987654321"
 }
 ```
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+### Response — Success `200`
+
 ```json
 {
   "success": true,
   "message": "Contact Updated successfully",
   "data": {
-    "first_name": "Han",
-    "last_name": "Feng",
-    "email": "yesoseso@example.com",
-    "phone": "088775758"
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "janedoe@example.com",
+    "phone": "08987654321"
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Bad Request or Validation Error: `400`
-- Unauthorized: `401`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "BadRequest/ Unauthorized",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `400` | Validation error |
+| `401` | Missing or invalid token |
+| `404` | Contact not found |
+
+---
+
 ## Remove Contact
-### Endpoint : 
-- **HTTP Method :** `DELETE`
-- **route path :** /api/contacts/:id
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+### Endpoint
+- **Method:** `DELETE`
+- **Path:** `/api/contacts/:contactId`
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+### Response — Success `200`
+
 ```json
 {
   "success": true,
@@ -153,80 +149,57 @@ Sesuaikan dengan Status code
   "data": "OK"
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Unauthorized: `401`
-- Not Found: `404`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "BadRequest/ Not Found/ Unauthorized",
-  "errors": []
-}
-```
+### Response — Failed
 
-## Search Contact
-### Endpoint : 
-- **HTTP Method :** `GET`
-- **route path :** /api/users/contacts
+| Status | Cause |
+|---|---|
+| `401` | Missing or invalid token |
+| `404` | Contact not found |
 
-### Query Parameter
-- **name**: `string`,contact first name or contact last name, *optional*
-- **phone**: `string`, contact phone, *optional*
-- **email**: `string`, contact email, *optional*
-- **page**: `number`, *default 1*
-- **size**: `number`, *default 10*
+---
 
-### Request Header
-- Authorization: Bearer Token / token UUID
+## Search Contacts
 
-### Response Body (Success) :
-**status code :** 
-- Ok: `200`
+### Endpoint
+- **Method:** `GET`
+- **Path:** `/api/contacts`
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| name | string | No | Filter by first or last name (partial match) |
+| email | string | No | Filter by email (partial match) |
+| phone | string | No | Filter by phone (partial match) |
+| page | number | No | Page number, default `1` |
+| size | number | No | Items per page, default `10` |
+
+### Response — Success `200`
+
 ```json
 {
   "success": true,
   "message": "Contact found",
   "data": [
     {
-      "id": "UUID-Format",
-      "first_name": "Xiao",
-      "last_name": "Yan",
-      "email": "yesoseso@example.com",
-      "phone": "088775758"
-    },
-    {
-      "id": "UUID-Format",
-      "first_name": "Yao",
-      "last_name": "Lao",
-      "email": "yesoseso@example.com",
-      "phone": "088775758"
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "johndoe@example.com",
+      "phone": "08123456789"
     }
   ],
   "paging": {
     "current_page": 1,
-    "total_page": 10,
+    "total_page": 5,
     "size": 10
   }
 }
 ```
-### Response Body (Failed) :
-**Status code :** 
-- Unauthorized: `401`
-- Not Found: `404`
-- Internal Server Error: `500`
-  
-**Message :**
-Sesuaikan dengan Status code
 
-```json
-{
-  "success": false,
-  "message": "Unauthorized/ Not Found/ Internal ..",
-  "errors": []
-}
-```
+### Response — Failed
+
+| Status | Cause |
+|---|---|
+| `401` | Missing or invalid token |

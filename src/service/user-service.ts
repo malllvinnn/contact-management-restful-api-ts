@@ -58,7 +58,7 @@ export class UserService {
         username: user.username,
         name: user.name
       },
-      process.env.JWT_SECRET || "secret",
+      process.env.JWT_SECRET!,
       {
         algorithm: "HS256",
         expiresIn: process.env.JWT_EXPIRES || "1h",
